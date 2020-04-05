@@ -1,0 +1,3 @@
+[submodule "clippyr"]
+	path = clippyr
+	url = https://github.com/SeanaldSeanson/clippyr.git
