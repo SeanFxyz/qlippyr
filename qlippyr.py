@@ -92,7 +92,7 @@ class ClippyrWidget(QtWidgets.QWidget):
             print('Bad clip specifier "' + spec + '"')
 
 
-if __name__=="__main__":
+def main():
     app = QtWidgets.QApplication([])
 
     widget = ClippyrWidget()
@@ -100,3 +100,7 @@ if __name__=="__main__":
     widget.show()
 
     sys.exit(app.exec_())
+
+
+if __name__=="__main__":
+    main()
