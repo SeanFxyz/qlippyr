@@ -4,7 +4,11 @@ from PySide2.QtCore import Qt, QCoreApplication, QFile, QObject
 from PySide2.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QApplication, QVBoxLayout, QHBoxLayout, QListWidget, QListWidgetItem, QProgressBar
 from PySide2.QtUiTools import QUiLoader
 
+RUN_BUTTON_TEXT = 'Run Clippyr'
+
 class ClippyrWidget(QtWidgets.QWidget):
+
+
     def __init__(self):
         super().__init__()
 
@@ -15,6 +19,7 @@ class ClippyrWidget(QtWidgets.QWidget):
         self.window = loader.load(ui_file)
         ui_file.close()
 
+        # Assign UI elements that need to be directly accessed to variables.
         self.sourceLineEdit = (
                 self.window.findChild(QLineEdit, 'sourceLineEdit'))
         self.sourceListWidget = (
@@ -23,14 +28,22 @@ class ClippyrWidget(QtWidgets.QWidget):
                 self.window.findChild(QLineEdit, 'specLineEdit'))
         self.specListWidget = (
                 self.window.findChild(QListWidget, 'specListWidget'))
+        self.runPushButton = (
+                self.window.findChild(QPushButton, 'runPushButton'))
         self.clippyrProgressBar = (
                 self.window.findChild(QProgressBar, 'clippyrProgressBar'))
 
-        (self.sourceListWidget
-                .currentItemChanged.connect(self.source_selected))
-        (self.specListWidget
-                .currentItemChanged.connect(self.spec_selected))
+        # Set initial text for UI elements as necessary.
+        self.runPushButton.setText(RUN_BUTTON_TEXT)
 
+        # Connect signals for variable-assigned UI elements.
+        self.sourceLineEdit.returnPressed.connect(self.add_source)
+        self.sourceListWidget.currentItemChanged.connect(self.source_selected)
+        self.specLineEdit.returnPressed.connect(self.add_spec)
+        self.specListWidget.currentItemChanged.connect(self.spec_selected)
+        self.runPushButton.clicked.connect(self.run_clippyr)
+
+        # Connect signals for other UI elements.
         (self.window.findChild(QPushButton, 'addSourcePushButton')
                 .clicked.connect(self.add_source))
         (self.window.findChild(QPushButton, 'rmSourcePushButton')
@@ -39,11 +52,11 @@ class ClippyrWidget(QtWidgets.QWidget):
                 .clicked.connect(self.add_spec))
         (self.window.findChild(QPushButton, 'rmSpecPushButton')
                 .clicked.connect(self.rm_spec))
-        (self.window.findChild(QPushButton, 'runPushButton')
-                .clicked.connect(self.run_clippyr))
 
+        # Initialize dictionary to store user input.
         self.spec_data = {}
 
+        # Will store currently selected source name.
         self.current_source = ''
 
     def source_selected(self, current, previous):
@@ -59,6 +72,9 @@ class ClippyrWidget(QtWidgets.QWidget):
 
     def add_source(self):
         source = self.sourceLineEdit.text()
+        if source == '':
+            return
+        # TODO: For web source, change text to video title.
 
         # TODO: Verify validity of source text.
         self.spec_data[source] = []
@@ -66,8 +82,10 @@ class ClippyrWidget(QtWidgets.QWidget):
         sourceItem = QListWidgetItem()
         sourceItem.setText(source)
         # TODO: Set icon for web/local source.
-        # TODO: For web source, change text to video title.
         self.sourceListWidget.addItem(sourceItem)
+
+        # Select the newly added item.
+        self.sourceListWidget.setCurrentItem(sourceItem)
 
         self.sourceLineEdit.setText('')
 
@@ -87,6 +105,9 @@ class ClippyrWidget(QtWidgets.QWidget):
         specItem.setText(spec)
         self.specListWidget.addItem(specItem)
 
+        # Select the newly added item.
+        self.specListWidget.addItem(specItem)
+
         self.specLineEdit.setText('')
 
     def rm_spec(self):
@@ -96,20 +117,26 @@ class ClippyrWidget(QtWidgets.QWidget):
         del spec
 
     def run_clippyr(self):
+        self.runPushButton.clicked.disconnect()
         source_count = self.sourceListWidget.count()
         self.clippyrProgressBar.setValue(0)
         for row in range(source_count):
+            self.runPushButton.setText(
+                    'Processing ' + str(row + 1) + '/' + str(source_count))
+
             source = self.sourceListWidget.item(row).text()
             clips = ','.join(self.spec_data[source])
-            clippyr.clippyr(url=source, in_file='', clip=clips, output='')
+            if re.match('^http', source):
+                clippyr.main(url=source, in_file='', clip=clips, output='')
+            else:
+                clippyr.main(url='', in_file=source, clip=clips, output='')
+
             self.clippyrProgressBar.setValue((row + 1) / source_count * 100)
 
+        self.runPushButton.setText(RUN_BUTTON_TEXT)
+        self.runPushButton.clicked.connect(self.run_clippyr)
 
-    def check_specs(self):
-        clips = self.clipTextEdit.toPlainText().split('\n')
-        bad_specs = clippyr.check_time_specs(clips)
-        for spec in bad_specs():
-            print('Bad clip specifier "' + spec + '"')
+        self.__init__(self)
 
 
 def main():

@@ -1,3 +1,6 @@
+# Program output directory
+output_clippyr/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
