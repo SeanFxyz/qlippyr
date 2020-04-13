@@ -8,7 +8,6 @@ RUN_BUTTON_TEXT = 'Run Clippyr'
 
 class ClippyrWidget(QtWidgets.QWidget):
 
-
     def __init__(self):
         super().__init__()
 
@@ -60,6 +59,8 @@ class ClippyrWidget(QtWidgets.QWidget):
         self.current_source = ''
 
     def source_selected(self, current, previous):
+        if current is None:
+            return
         self.current_source = current.text()
         self.specListWidget.clear()
         for spec in self.spec_data[self.current_source]:
@@ -118,6 +119,7 @@ class ClippyrWidget(QtWidgets.QWidget):
 
     def run_clippyr(self):
         self.runPushButton.clicked.disconnect()
+        self.runPushButton.setText('Processing 1/1')
         source_count = self.sourceListWidget.count()
         self.clippyrProgressBar.setValue(0)
         for row in range(source_count):
@@ -133,6 +135,7 @@ class ClippyrWidget(QtWidgets.QWidget):
 
             self.clippyrProgressBar.setValue((row + 1) / source_count * 100)
 
+        self.sourceListWidget.clear()
         self.runPushButton.setText(RUN_BUTTON_TEXT)
         self.runPushButton.clicked.connect(self.run_clippyr)
 

@@ -37,7 +37,14 @@
          <enum>QLayout::SetNoConstraint</enum>
         </property>
         <item>
-         <widget class="QLineEdit" name="sourceLineEdit"/>
+         <widget class="QLineEdit" name="sourceLineEdit">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
         </item>
         <item>
          <layout class="QHBoxLayout" name="sourceButtonHBox">
@@ -47,7 +54,7 @@
           <item>
            <widget class="QPushButton" name="addSourcePushButton">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -60,7 +67,7 @@
           <item>
            <widget class="QPushButton" name="rmSourcePushButton">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -83,7 +90,14 @@
          <enum>QLayout::SetNoConstraint</enum>
         </property>
         <item>
-         <widget class="QLineEdit" name="specLineEdit"/>
+         <widget class="QLineEdit" name="specLineEdit">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout">
@@ -93,7 +107,7 @@
           <item>
            <widget class="QPushButton" name="addSpecPushButton">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -106,7 +120,7 @@
           <item>
            <widget class="QPushButton" name="rmSpecPushButton">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -134,10 +148,13 @@
     </item>
     <item>
      <layout class="QHBoxLayout" name="progressHBox">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetNoConstraint</enum>
+      </property>
       <item>
        <widget class="QPushButton" name="runPushButton">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -153,7 +170,7 @@
       <item>
        <widget class="QProgressBar" name="clippyrProgressBar">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -162,6 +179,9 @@
          <number>0</number>
         </property>
         <property name="textVisible">
+         <bool>false</bool>
+        </property>
+        <property name="invertedAppearance">
          <bool>false</bool>
         </property>
        </widget>
