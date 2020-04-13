@@ -121,7 +121,6 @@ class ClippyrWidget(QtWidgets.QWidget):
 
     def run_clippyr(self):
         self.runPushButton.clicked.disconnect()
-        self.runPushButton.setText('Processing 1/1')
         source_count = self.sourceListWidget.count()
         self.clippyrProgressBar.setValue(0)
         for row in range(source_count):
