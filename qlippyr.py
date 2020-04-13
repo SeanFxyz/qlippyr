@@ -64,9 +64,10 @@ class ClippyrWidget(QtWidgets.QWidget):
         self.current_source = current.text()
         self.specListWidget.clear()
         for spec in self.spec_data[self.current_source]:
-            specItem = QListWidgetItem()
-            specItem.setText(spec)
-            self.specListWidget.addItem(specItem)
+            if spec:
+                specItem = QListWidgetItem()
+                specItem.setText(spec)
+                self.specListWidget.addItem(specItem)
 
     def spec_selected(self, current, previous):
         pass
@@ -113,9 +114,10 @@ class ClippyrWidget(QtWidgets.QWidget):
 
     def rm_spec(self):
         row = self.specListWidget.currentRow()
-        spec = self.specListWidget.takeItem(row)
-        spec_data[self.currentSource][row] = ''
-        del spec
+        specItem = self.specListWidget.takeItem(row)
+        spec = specItem.text()
+        self.spec_data[self.current_source].remove(spec)
+        del specItem
 
     def run_clippyr(self):
         self.runPushButton.clicked.disconnect()
@@ -136,10 +138,9 @@ class ClippyrWidget(QtWidgets.QWidget):
             self.clippyrProgressBar.setValue((row + 1) / source_count * 100)
 
         self.sourceListWidget.clear()
+        self.specListWidget.clear()
         self.runPushButton.setText(RUN_BUTTON_TEXT)
         self.runPushButton.clicked.connect(self.run_clippyr)
-
-        self.__init__(self)
 
 
 def main():
